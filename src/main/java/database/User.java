@@ -2,6 +2,7 @@ package database;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.bson.Document;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -19,10 +20,10 @@ public class User {
 
     private String username;
     private String email;
-    private String password;
+    private byte[] password;
 
-    public DBObject getAsDBObject(){
-        return new BasicDBObject()
+    public Document getAsDocument(){
+        return new Document()
                 .append("username", this.username)
                 .append("email", this.email)
                 .append("password", this.password);
@@ -46,7 +47,7 @@ public class User {
         return this;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
@@ -58,9 +59,8 @@ public class User {
 
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = factory.generateSecret(spec).getEncoded();
 
-        this.password = Arrays.toString(hash);
+        this.password = factory.generateSecret(spec).getEncoded();
         return this;
     }
 }
