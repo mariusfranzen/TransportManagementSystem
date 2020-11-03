@@ -6,6 +6,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import database.Login;
+import database.Register;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -48,8 +49,8 @@ public class Main {
         panel.addComponent(new Button("Register", new Runnable() {
             @Override
             public void run() {
-                panel.removeAllComponents();
                 try {
+                    panel.removeAllComponents();
                     registerDialog();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -95,7 +96,11 @@ public class Main {
         panel.addComponent(new Button("Create account", new Runnable() {
             @Override
             public void run() {
-                System.out.println("Hej");
+                try {
+                    Register.createAccount(username.getText(), email.getText(), password.getText(), confirmPassword.getText());
+                } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
             }
         }));
     }

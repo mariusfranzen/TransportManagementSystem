@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoClientSettings;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
 
 import java.security.NoSuchAlgorithmException;
@@ -17,7 +18,8 @@ import java.security.spec.InvalidKeySpecException;
  */
 public class Register {
 
-    private static ConnectionString uri = new ConnectionString("mongodb+srv://admin:admin@cluster0.vg2ir.mongodb.net/app?w=majority");
+    private static Dotenv dotenv = Dotenv.load();
+    private static ConnectionString uri = new ConnectionString(dotenv.get("CONNECTION_STRING"));
     private static MongoClientSettings settings = MongoClientSettings.builder()
             .applyConnectionString(uri)
             .retryWrites(true)
