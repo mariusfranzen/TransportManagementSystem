@@ -1,7 +1,5 @@
 package database;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import org.bson.Document;
 
 import javax.crypto.SecretKeyFactory;
@@ -10,23 +8,33 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * @author Marius on 2020-11-02.
  * @version %I%, %G%
  */
+
 public class User {
 
+    private UUID userId;
     private String username;
     private String email;
     private byte[] password;
 
+    public User(){
+        userId = UUID.randomUUID();
+    }
+
     public Document getAsDocument(){
-        return new Document()
+        return new Document("_id", this.userId)
                 .append("username", this.username)
                 .append("email", this.email)
                 .append("password", this.password);
+    }
+
+    public UUID getUserId() {
+        return userId;
     }
 
     public String getUsername() {
