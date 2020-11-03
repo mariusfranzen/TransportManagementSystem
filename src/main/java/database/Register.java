@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoClientSettings;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
+import org.bson.UuidRepresentation;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -21,6 +22,7 @@ public class Register {
     private static Dotenv dotenv = Dotenv.load();
     private static ConnectionString uri = new ConnectionString(dotenv.get("CONNECTION_STRING"));
     private static MongoClientSettings settings = MongoClientSettings.builder()
+            .uuidRepresentation(UuidRepresentation.STANDARD)
             .applyConnectionString(uri)
             .retryWrites(true)
             .build();
