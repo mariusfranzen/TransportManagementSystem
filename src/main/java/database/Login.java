@@ -6,8 +6,18 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.client.model.Filters;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
+import org.bson.conversions.*;
+import com.mongodb.client.*;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 
 /**
  * @author Marius on 2020-11-03.
@@ -25,12 +35,31 @@ public class Login {
     private static MongoDatabase database = mongoClient.getDatabase("app");
     private static MongoCollection<Document> collection = database.getCollection("users");
 
-    public static boolean areCredentialsValid(String usernameOrEmail, String password){
-        //TODO: Check if the users credentials are valid
-        if (true) {
+    public static boolean areCredentialsValid(String usernameOrEmail, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
+        byte[] encodedPassword = factory.generateSecret(spec).getEncoded();
+
+        Document user = collection.find(
+                Filters.and(
+                        Filters.or(
+                                Filters.eq("username", usernameOrEmail),
+                                Filters.eq("email", usernameOrEmail)),
+                        Filters.eq("password", encodedPassword)
+                )
+        ).first();
+
+        if (user != null) {
             loginUser(usernameOrEmail, password);
+            return true;
         }
-        return true;
+        return false;
     }
 
     private static void loginUser(String usernameOrEmail, String password){
