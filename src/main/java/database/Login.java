@@ -44,7 +44,10 @@ public class Login {
                 )
         ).first();
 
-        assert user != null;
+        if (user == null){
+            return false;
+        }
+
         if (PasswordHash.validatePassword(password, user.getString("password"))){
             loginUser(usernameOrEmail, password);
             return true;

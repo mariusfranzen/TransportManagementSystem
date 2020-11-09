@@ -1,5 +1,8 @@
 package customer;
 
+import com.mongodb.DBObject;
+import org.bson.Document;
+
 import java.util.UUID;
 
 /**
@@ -12,12 +15,22 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String address;
-    private Ticket[] tickets;
+    //private Ticket[] tickets;
     private String phoneNumber;
     private String email;
 
     public Customer(){
         this.customerNumber = UUID.randomUUID();
+    }
+
+    public Document getAsDocument(){
+        return new Document().append("_id", customerNumber)
+                .append("firstName", firstName)
+                .append("lastName", lastName)
+                .append("address", address)
+                //.append("tickets", tickets)
+                .append("phoneNumber", phoneNumber)
+                .append("email", email);
     }
 
     public UUID getCustomerNumber() {
@@ -51,14 +64,14 @@ public class Customer {
         return this;
     }
 
-    public Ticket[] getTickets() {
+    /*public Ticket[] getTickets() {
         return tickets;
     }
 
     public Customer setTickets(Ticket[] tickets) {
         this.tickets = tickets;
         return this;
-    }
+    }*/
 
     public String getPhoneNumber() {
         return phoneNumber;

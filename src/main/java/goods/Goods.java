@@ -1,6 +1,9 @@
 package goods;
 
 import customer.Customer;
+import org.bson.Document;
+
+import java.util.UUID;
 
 /**
  * @author Marius on 2020-11-02.
@@ -8,11 +11,32 @@ import customer.Customer;
  */
 public class Goods {
 
+    private UUID shippingId;
     private String description;
+    private Customer sender;
+    private Customer receiver;
     private float weight;
     private float width;
     private float length;
     private float height;
+
+    public Goods(){
+        this.shippingId = UUID.randomUUID();
+    }
+
+    public Document getAsDocument(){
+        return new Document("_id", this.shippingId)
+                .append("description", this.description)
+                .append("sender", this.sender.getAsDocument())
+                .append("receiver", this.receiver.getAsDocument())
+                .append("weight", this.weight)
+                .append("length", this.length)
+                .append("height", this.height);
+    }
+
+    public UUID getShippingId() {
+        return shippingId;
+    }
 
     public float getLength() {
         return length;
@@ -40,9 +64,6 @@ public class Goods {
         this.height = height;
         return this;
     }
-
-    private Customer sender;
-    private Customer receiver;
 
     public Customer getSender() {
         return sender;
