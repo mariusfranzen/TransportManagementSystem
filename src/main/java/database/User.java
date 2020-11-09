@@ -2,12 +2,8 @@ package database;
 
 import org.bson.Document;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.UUID;
 
 /**
@@ -20,7 +16,7 @@ public class User {
     private UUID userId;
     private String username;
     private String email;
-    private byte[] password;
+    private String password;
 
     public User(){
         userId = UUID.randomUUID();
@@ -55,20 +51,12 @@ public class User {
         return this;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
     public User setPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-        this.password = factory.generateSecret(spec).getEncoded();
+        this.password = PasswordHash.createHash(password);
         return this;
     }
 }

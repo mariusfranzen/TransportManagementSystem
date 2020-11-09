@@ -37,25 +37,15 @@ public class Login {
 
     public static boolean areCredentialsValid(String usernameOrEmail, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-        byte[] encodedPassword = factory.generateSecret(spec).getEncoded();
-
         Document user = collection.find(
-                Filters.and(
-                        Filters.or(
-                                Filters.eq("username", usernameOrEmail),
-                                Filters.eq("email", usernameOrEmail)),
-                        Filters.eq("password", encodedPassword)
+                Filters.or(
+                        Filters.eq("username", usernameOrEmail),
+                        Filters.eq("email", usernameOrEmail)
                 )
         ).first();
 
-        if (user != null) {
+        assert user != null;
+        if (PasswordHash.validatePassword(password, user.getString("password"))){
             loginUser(usernameOrEmail, password);
             return true;
         }
