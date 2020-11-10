@@ -1,5 +1,7 @@
 package database;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -10,6 +12,9 @@ import goods.Goods;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 /**
  * @author Marius on 2020-11-09.
@@ -29,8 +34,17 @@ public class GoodsAndTransport {
     private static MongoCollection<Document> goodsCollection = database.getCollection("goods");
     private static MongoCollection<Document> transportCollection = database.getCollection("transport");
 
-    public static void createNewGoods(Goods newGoods){
-        goodsCollection.insertOne(newGoods.getAsDocument());
+    public static void createNewGoods(Goods newGoods) throws FileNotFoundException, DocumentException {
+        if (goodsCollection.insertOne(newGoods.getAsDocument()).wasAcknowledged()){
+            com.itextpdf.text.Document receipt = new com.itextpdf.text.Document();
+            PdfWriter.getInstance(receipt, new FileOutputStream("GoodsReceipt_" + newGoods.getShippingId().toString() + ".pdf"));
+
+            receipt.open();
+            Font font = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+            receipt.add(new Chunk("Shipping receipt for " + newGoods.getShippingId().toString(), font));
+
+            receipt.close();
+        }
     }
 
 }

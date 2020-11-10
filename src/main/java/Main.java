@@ -6,6 +6,7 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.itextpdf.text.DocumentException;
 import customer.Customer;
 import database.GoodsAndTransport;
 import database.Login;
@@ -363,7 +364,7 @@ public class Main {
 
                     panel.removeAllComponents();
                     goodsOrTransportDialog();
-                } catch (IOException e) {
+                } catch (IOException | DocumentException e) {
                     e.printStackTrace();
                 }
             }
