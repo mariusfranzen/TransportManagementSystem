@@ -33,6 +33,32 @@ public class Main {
 
     public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
 
+        //PSEUDO:
+        /*
+        1. Start
+        2. Open login window. Either (3)login or (5) register an account.
+        3. Enter username/email and password, and click login.
+        4. Check if the username/email and password match. If not, return to (3). If it does match, go to (7)
+        5. Open the register window.
+        6. Let the user input a username, email and password. If it is successful, proceed (7), else, throw an error and try again.
+        7. Pick either goods(8) or passengers(11).
+        8. Input details for both sender and receiver. If it successfully uploads to the DB, proceed, else throw an error.
+        9. Input the details for the goods. Contents, weight, size etc and calculate and display the cost of shipping.
+        10. Upload the data to the DB. If it is successful, save a receipt and go to (7). If either fails, throw an error.
+        11. Select if the passenger will travel by air, road or rail.
+        12. Input the passenger and travel details: Name, address, email, phone and where he's traveling from and to.
+            The passenger can also pick the date and time he wishes to travel.
+        13. If travel by air, go to (14), road, go to (17), rail, go to (19). The price will always be displayed and updated.
+        14. Check the database for airplanes going to passenger destination, and allow the user to pick one of the flights.
+        15. Designate a seat for the passenger. The passenger may choose between economy, bussines and first class.
+        16. Mark that seat as taken and print a ticket and receipt for the passenger, and go to (7).
+        17. Check the database for buses going to passenger destination. Auto-pick the one closest to requested date and time,
+            but display other options.
+        18. Print a ticket and receipt for the passenger and go to (7).
+        19. Check the database for trains going to passenger destination. Allow the passenger to pick one of the trains.
+        20. Print a ticket and receipt for the passenger and to go (7).
+         */
+
         Terminal terminal = new DefaultTerminalFactory().createTerminal();
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
