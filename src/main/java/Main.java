@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 public class Main {
 
     private static Panel panel = new Panel();
+    private static int totalCost;
 
     public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
 
@@ -202,8 +203,10 @@ public class Main {
 
         Customer sender = new Customer();
 
-        leftPanel.addComponent(new Label("Customer ID: " + sender.getCustomerNumber()).addStyle(SGR.BOLD).setSize(new TerminalSize(2, 1)));
-        leftPanel.addComponent(new EmptySpace(new TerminalSize(0, 0)));
+        leftPanel.addComponent(new Label("Customer ID: ").addStyle(SGR.BOLD));
+        leftPanel.addComponent(new EmptySpace());
+        leftPanel.addComponent(new Label(sender.getCustomerNumber().toString()).addStyle(SGR.BOLD));
+        leftPanel.addComponent(new EmptySpace());
 
         leftPanel.addComponent(new Label("First name: "));
         TextBox sFirstName = new TextBox();
@@ -228,8 +231,10 @@ public class Main {
 
         Customer receiver = new Customer();
 
-        rightPanel.addComponent(new Label("Customer ID: " + receiver.getCustomerNumber()).addStyle(SGR.BOLD).setSize(new TerminalSize(2, 1)));
-        rightPanel.addComponent(new EmptySpace(new TerminalSize(0, 0)));
+        rightPanel.addComponent(new Label("Customer ID: ").addStyle(SGR.BOLD));
+        rightPanel.addComponent(new EmptySpace());
+        rightPanel.addComponent(new Label(receiver.getCustomerNumber().toString()).addStyle(SGR.BOLD));
+        rightPanel.addComponent(new EmptySpace());
 
         rightPanel.addComponent(new Label("First name: "));
         TextBox rFirstName = new TextBox();
@@ -346,24 +351,28 @@ public class Main {
             @Override
             public void onTextChanged(String s, boolean b) {
                 fee.setText(setNewFee(weight, length, width, height));
+                total.setText(totalCost + ",00 kr");
             }
         });
         length.setTextChangeListener(new TextBox.TextChangeListener() {
             @Override
             public void onTextChanged(String s, boolean b) {
                 fee.setText(setNewFee(weight, length, width, height));
+                total.setText(totalCost + ",00 kr");
             }
         });
         width.setTextChangeListener(new TextBox.TextChangeListener() {
             @Override
             public void onTextChanged(String s, boolean b) {
                 fee.setText(setNewFee(weight, length, width, height));
+                total.setText(totalCost + ",00 kr");
             }
         });
         height.setTextChangeListener(new TextBox.TextChangeListener() {
             @Override
             public void onTextChanged(String s, boolean b) {
                 fee.setText(setNewFee(weight, length, width, height));
+                total.setText(totalCost + ",00 kr");
             }
         });
 
@@ -435,7 +444,7 @@ public class Main {
         } else if (goodsWeight < 20 && !isSmall) {
             newFee = 441;
         }
-
+        totalCost = newFee + 10;
         return newFee + ",00 kr";
     }
 
