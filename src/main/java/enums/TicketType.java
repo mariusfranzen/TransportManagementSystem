@@ -6,6 +6,8 @@ package enums;
  */
 public enum TicketType {
 
-
+    AIRPLANE,
+    TRAIN,
+    BUS
 
 }

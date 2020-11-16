@@ -45,6 +45,11 @@ public class Ticket {
         return this;
     }
 
+    public Ticket addPersonToList(Person person) {
+        this.personList.add(person);
+        return this;
+    }
+
     public float getPrice() {
         return price;
     }
