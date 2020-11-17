@@ -7,6 +7,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -15,8 +16,8 @@ import java.util.Objects;
  */
 public class APIHandler {
 
-    public static City getCity() throws Exception {
-        City city;
+    public static City getCity() {
+        City city = new City();
         try {
             OkHttpClient client = new OkHttpClient();
             Dotenv dotenv = Dotenv.load();
@@ -36,10 +37,8 @@ public class APIHandler {
                 Gson gson = new Gson();
                 city = gson.fromJson(Objects.requireNonNull(response.body()).string(), City.class);
             }
-        } catch (NullPointerException e) {
-            throw new NullPointerException(e.toString());
-        } catch (Exception e) {
-            throw new Exception(e.toString());
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
         }
         return city;
     }
